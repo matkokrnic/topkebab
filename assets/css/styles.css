@@ -641,3 +641,24 @@ img{
   padding: 0;                    /* Ensure no padding adds extra space */
   margin-top: 25vh;
 }
+
+.map-wrapper iframe {
+  position: absolute;   /* Positions the iframe absolutely within its parent */
+  top: 0;
+  left: 0;
+  width: 100%;          /* Full width of the container */
+  height: 100%;         /* Full height of the container */
+  border: 0;            /* Removes the border */
+  border-radius: inherit; /* Inherits border radius from parent */
+}
+
+.map-wrapper {
+  position: relative;      /* Ensure any absolute elements inside stay within */
+  padding-bottom: 56.25%;  /* This makes it responsive: 16:9 aspect ratio */
+  height: 0;               /* This works with padding to maintain aspect ratio */
+  overflow: hidden;        /* Prevents any overflow */
+  max-width: 100%;         /* Keeps map within container width */
+  background-color: #f0f0f0; /* Optional: add a background color while the map loads */
+  border-radius: 8px;      /* Optional: smooth rounded corners */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Optional: shadow for a modern look */
+}
