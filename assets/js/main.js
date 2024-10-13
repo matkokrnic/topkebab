@@ -59,35 +59,7 @@ function scrollTop(){
 }
 window.addEventListener('scroll', scrollTop)
 
-/*==================== DARK LIGHT THEME ====================*/ 
-const themeButton = document.getElementById('theme-button')
-const darkTheme = 'dark-theme'
-const iconTheme = 'bx-sun'
 
-// Previously selected topic (if user selected)
-const selectedTheme = localStorage.getItem('selected-theme')
-const selectedIcon = localStorage.getItem('selected-icon')
-
-// We obtain the current theme that the interface has by validating the dark-theme class
-const getCurrentTheme = () => document.body.classList.contains(darkTheme) ? 'dark' : 'light'
-const getCurrentIcon = () => themeButton.classList.contains(iconTheme) ? 'bx-moon' : 'bx-sun'
-
-// We validate if the user previously chose a topic
-if (selectedTheme) {
-  // If the validation is fulfilled, we ask what the issue was to know if we activated or deactivated the dark
-  document.body.classList[selectedTheme === 'dark' ? 'add' : 'remove'](darkTheme)
-  themeButton.classList[selectedIcon === 'bx-moon' ? 'add' : 'remove'](iconTheme)
-}
-
-// Activate / deactivate the theme manually with the button
-themeButton.addEventListener('click', () => {
-    // Add or remove the dark / icon theme
-    document.body.classList.toggle(darkTheme)
-    themeButton.classList.toggle(iconTheme)
-    // We save the theme and the current icon that the user chose
-    localStorage.setItem('selected-theme', getCurrentTheme())
-    localStorage.setItem('selected-icon', getCurrentIcon())
-})
 
 /*==================== SCROLL REVEAL ANIMATION ====================*/
 const sr = ScrollReveal({
@@ -96,6 +68,140 @@ const sr = ScrollReveal({
     duration: 2000,
     reset: true
 });
+
+sr.reveal(`.home__data, .home__img,
+            .about__data, .about__img,
+            .services__content, .menu__content,
+            .app__data, .app__img,
+            .contact__data, .contact__button,
+            .footer__content`, {
+    interval: 200
+})
+
+
+function initializeInteractiveMenu() {
+    const menuButtons = document.querySelectorAll('.menu-button');
+    const menuSections = document.querySelectorAll('.menu-items');
+
+    const menuItemsData = {
+        pljeskavica: {
+            description: "Lepinja 150 g, meso 200 g, umaci 70 g, salate po izboru 70 g ",
+            ingredients: ""
+        },
+        punjena: {
+            description: "Tortilja, meso 200 g, umaci 70 g, salate po izboru 70 g",
+            ingredients: ""
+        },
+        cevapi: {
+            description: "Hambi pecivo 150 g , pljeskavica junetina 100 g, meso kebab 100 g, umaci 70 g, salate po izboru 70 g",
+            ingredients: ""
+        },
+        a: {
+            description: "Hambi pecivo 150 g , pljeskavica junetina 100 g, umaci 70 g, salate po izboru 70 g",
+            ingredients: ""
+        },
+        b: {
+            description: "Hambi pecivo 150 g, pljeskavica junetina 100 g, sir gouda 18,75 g, umaci 70 g, salate po izboru 70 g",
+            ingredients: ""
+        },
+        c: {
+            description: "Hambi pecivo 150 g , 2x pljeskavica junetina 100 g, umaci 70 g, salate po izboru 70 g",
+            ingredients: ""
+        },
+        d: {
+            description: "Hambi pecivo 150 g, 2x pljeskavica junetina 100 g, 2x sir gouda 18,75 g, umaci 70 g, salate po izboru 70g",
+            ingredients: ""
+        },
+        e: {
+            description: "Kebab meso 200 g, salate po izboru 150g, umaci 70 g",
+            ingredients: ""
+        },
+        f: {
+            description: "Pogača 150 g, umaci 100 g, salate po izboru 100 g",
+            ingredients: ""
+        },
+        g: {
+            description: "Zelena salata, rajčica, kupus, luk, krastavci, kukuruz 50 g",
+            ingredients: ""
+        },
+        h: {
+            description: "Blagi umak, ljuti umak, majonza, ketchup, tartar, senf, ajvar 100 g",
+            ingredients: ""
+        },
+        i: {
+            description: "Feta sir(porcija 70 g)",
+            ingredients: ""
+        },
+        j: {
+            description: "Lepinja grill, hambi pecivo grill(dodatak uz salate, 140 g)",
+            ingredients: ""
+        },
+        k: {
+            description: "Sir gouda za cheeseburger (18,75 g)",
+            ingredients: ""
+        },
+        l: {
+            description: "Negazirana voda 0,5 l",
+            ingredients: ""
+        },
+        m: {
+            description: "Mineralna voda 0,5 l",
+            ingredients: ""
+        },
+        n: {
+            description: "Coca-cola, Fanta, Schweppes, Ledeni čaj 0,5 l",
+            ingredients: ""
+        },
+        // Add more menu items as needed
+    };
+
+    // Hide all menu sections initially
+    menuSections.forEach(section => {
+        section.style.display = 'none';
+    });
+
+    menuButtons.forEach((button, index) => {
+        button.addEventListener('click', function() {
+            menuSections.forEach((section, sectionIndex) => {
+                if (sectionIndex === index) {
+                    section.style.display = section.style.display === 'none' ? 'block' : 'none';
+                } else {
+                    section.style.display = 'none';
+                }
+            });
+        });
+    });
+
+    document.querySelectorAll('.menu-item').forEach(item => {
+        item.addEventListener('click', function() {
+            const itemData = menuItemsData[this.dataset.item];
+            const detailsElement = this.nextElementSibling;
+            
+            // Toggle visibility of details
+            detailsElement.style.display = detailsElement.style.display === 'none' ? 'block' : 'none';
+            
+            // Update content only if details are being shown
+            if (detailsElement.style.display === 'block') {
+                detailsElement.querySelector('.detail-description').textContent = itemData.description;
+                detailsElement.querySelector('.detail-ingredients').textContent = itemData.ingredients;
+            }
+            
+            // Hide details of other menu items in the same section
+            const parentSection = this.closest('.menu-items');
+            parentSection.querySelectorAll('.menu-details').forEach(details => {
+                if (details !== detailsElement) {
+                    details.style.display = 'none';
+                }
+            });
+        });
+    });
+}
+
+// Initialize the interactive menu when the DOM is fully loaded
+document.addEventListener('DOMContentLoaded', initializeInteractiveMenu);
+
+/*==================== SCROLL REVEAL ANIMATION ====================*/
+
 
 sr.reveal(`.home__data, .home__img,
             .about__data, .about__img,
